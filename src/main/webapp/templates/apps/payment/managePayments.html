@@ -1,0 +1,161 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>$view.title</title> 
+        <script src="https://secure.ewaypayments.com/scripts/eCrypt.js"></script>
+    </head>
+
+    <body>
+
+        <ul class="nav nav-tabs tab-bricky" id="myTab">
+            <li class="active"><a data-toggle="tab" href="#panel_payments"><i class="green fa fa-home"></i> Payments</a></li>
+            <li class=""><a data-toggle="tab" href="#panel_pay"><i class="green fa fa-home"></i> eWay Pay</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="panel_pay" class="tab-pane">
+                <form data-eway-encrypt-key="vF2SEUdV8mzbMvpq46BW5K/MrcmY+y45JCpV406g4HxJTUkEQDHIUTPx7NFhohsIJ8rpqaM/IZlaPMOsWrIACxXiHWPxY2W6h7ti3/1A/GTJdATPeGZictzl1ZYoQw4t4sgNthFagju/S0LGvkiW+cD8rV0AVtO6DG9Pju5JW0vsg8WToGLlvXVBtgY0r9fuxMM/6FYwQ5BC/oKdQ9+GArFfZtVwCOZ87PG9FIK+cu0Up+6/V4RVoMddg6N+pbb8gxXpaZa0OfmMa2lpCbMRxnFf0jlDKD9M8qElxdWoVL5xAnZjAjobXDUYLgWR3bNiux+5t0UAJiUBhNS7+eNUPQ==">
+                    <div class="modal-header">
+                        <input id="submit" class="btn btn-sm btn-info" type="button" value="Payment via eWAY" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Name" class="col-sm-3 control-label">Card Name</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control required" required="true" id="Name" name="Name" value = "Lee YOU"/>	                            
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Number" class="col-sm-3 control-label">Card Number</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control required" required="true" id="Number" name="Number" data-regex="^[0-9]+$" value = "4444333322221111"/>	                            
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ExpiryMonth" class="col-sm-3 control-label">ExpiryMonth</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control required" required="true" id="ExpiryMonth" name="ExpiryMonth" data-regex="^[0-9]+$" value="12"/>	                            
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ExpiryYear" class="col-sm-3 control-label">ExpiryYear</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control required" required="true" id="ExpiryYear" name="ExpiryYear" data-regex="^[0-9]+$" value="23"/>	                            
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="CVN" class="col-sm-3 control-label">CVN</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control required" required="true" id="CVN" name="CVN" data-regex="^[0-9]+$" value="567"/>	                            
+                        </div>
+                    </div>      
+
+                    <div class="form-group">
+                        <label for="TotalAmount" class="col-sm-3 control-label">TotalAmount</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control required" required="true" id="TotalAmount" name="TotalAmount" data-regex="^[0-9]+$" value="897"/>	                            
+                        </div>
+                    </div>   
+                    <div class="form-group">
+                        <label for="CurrencyCode" class="col-sm-3 control-label">CurrencyCode</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control required" required="true" id="CurrencyCode" name="CurrencyCode" value="AUD"/> 
+                        </div>
+                    </div>  
+
+                </form>
+            </div>
+
+            <div id="panel_payments" class="tab-pane active">
+                <table id="payments-table" class="table table-striped table-hover">
+                    <colgroup>
+                        <col width="" />
+                        <col width="" />
+                        <col width="" />
+                        <col width="" />
+                        <col width="" />
+                        <col width="" />
+                        <col width="" />
+                        <col width="" />                        
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th >Card Number</th>
+                            <th >Total Amount</th>
+                            <th >Currency</th>
+                            <th >Purchase Status</th>                        
+                            <th >Created Date</th>    
+                            <th >Created By</th>                             
+                            <th>Organisation</th>
+                        </tr> 
+                    </thead>
+                    <tbody id="payments-body">
+                        #foreach($payment in $page.paymentTransactionByOrg)
+                        <tr>
+                            #set($Integer = 0)
+
+                            #set($amount=$Integer.parseInt($payment.totalAmount) / 100)
+                            
+
+                            <td>$payment.transactionID</td>
+                            <td>$payment.cardNumber</td>
+                            <td>$amount</td>
+                            <td>$payment.currencyCode</td>  
+                            <td>
+                                <div class="$payment.transactionStatus">
+                                    #if($payment.transactionStatus == "true")
+                                    <span class="label label-sm label-success">successful</span>
+                                    #else
+                                    <span class="label label-sm label-warning">Failed </span>
+                                    #end                                        
+                                </div>
+                            </td>                         
+                            <td>$formatter.formatDate($payment.createdDate)</td>
+                            <td>$payment.createdBy.name</td>
+                            <td>$payment.org.title</td>                            
+
+                        </tr>
+                        #end
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#submit').click(function (event) {
+
+                    $.ajax({
+                        url: "/eWayTest",
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            name: $('#Name').val(),
+                            expiryMonth: $('#ExpiryMonth').val(),
+                            expiryYear: $('#ExpiryYear').val(),
+                            totalAmount: $('#TotalAmount').val() * 100,
+                            currencyCode: $('#CurrencyCode').val(),
+                            number: eCrypt.encryptValue($('#Number').val()),
+                            cvn: eCrypt.encryptValue($('#CVN').val())
+
+                        },
+                        success: function (data) {
+                            flog("success", data);
+                            Msg.success(data.messages, 6000);
+                            $('#payments-body').reloadFragment();
+                        },
+                        error: function (resp) {
+                            flog("errors", resp);
+                            Msg.error("An error occured!\r\n" + data.messages, 6000);
+                        }
+                    });
+                });
+            });
+        </script>
+    </body>
+
+</html>
